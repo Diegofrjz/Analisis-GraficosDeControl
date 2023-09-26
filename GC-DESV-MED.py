@@ -1,8 +1,13 @@
+
 from builtins import input
 
 # Tiempo de la distribución del gráfico de control (La cantidad de columnas de los datos_desv)
-tiempo_gc = int(input("Ingrese la cantidad de puntos del Gráfico de control (Cantidad de columnas de los datos): "))
-
+while True:
+    try:
+        tiempo_gc = int(input("Ingrese la cantidad de puntos del Gráfico de control (Cantidad de columnas de los datos): "))
+        break
+    except ValueError:
+        print("Tipo de valor incorrecto")
 # El orden de la Array es el siguiente A2,A3,B3,B4
 #Para el de rangos moviles falta E2
 tab_tamaño_muestra_2 = [1.88, 2.659, 0, 3.267]
@@ -59,14 +64,19 @@ diccionario_arrays = {
 }
 
 # Solicita al usuario que ingrese el tamaño de muestra
-tamaño_muestra = int(input("Ingrese el tamaño de muestra (del 2 al 25): "))
-
+while True:
+    try:
+        tamaño_muestra = int(input("Ingrese el tamaño de muestra (del 2 al 25): "))
+        if 2 <= tamaño_muestra <= 25:
+            break
+        else:
+            print("El tamaño de la muestra tiene que estar entre 2 y 25")
+    except ValueError:
+        print("El tamaño de la muestra tiene que estar entre 2 y 25")
 # Verifica si el tamaño de muestra está en el diccionario
 if tamaño_muestra in diccionario_arrays:
     # Accede a la array correspondiente usando el diccionario
     array_seleccionada = diccionario_arrays[tamaño_muestra]
-else:
-    print("Tamaño de muestra no válido.")
 # Ahora con la variable: "array_seleccionada" se pueden hacer operaciones
 
 # CREAMOS LA ARRAY DATOS PARA LA DESVIACION ESTANDAR:
