@@ -111,8 +111,8 @@ print("El límite de control superior para el G.C de Desv.Est es: ",LCS_DESV)
 print("El límite de control inferior para el G.C de Desv.Est es: ",LCI_DESV)
 print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
 
-# 1.ÁLCULO DE RACHA POSITIVA:
-print("ANALISIS DE RACHA:")
+# 1.CALCULO DE RACHA POSITIVA:
+print("1° ANALISIS DE RACHA:")
 # Establecer la cantidad mínima de puntos consecutivos requeridos
 min_puntos_consecutivos = 7
 
@@ -135,7 +135,7 @@ if contador_consecutivo >= min_puntos_consecutivos:
 else:
     print(f"No se encontraron {min_puntos_consecutivos} o más puntos consecutivos mayores que sProm.")
 
-# 1.CÁLCULO DE RACHA NEGATIVA:
+# CÁLCULO DE RACHA NEGATIVA:
 for puntito in datos_desv:
     if puntito < sPromedio:
         contador_consecutivin += 1
@@ -151,8 +151,9 @@ else:
     print(f"No se encontraron {min_puntos_consecutivos} o más puntos consecutivos menores que sProm.")
 
 print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
+
 # 2.CÁLCULO DE LA TENDENCIA:
-print("ANALISIS DE LA TENDENCIA:")
+print("2° ANALISIS DE LA TENDENCIA:")
 # Longitud de la secuencia que deseas encontrar (en este caso, 6 números consecutivos)
 longitud_objetivo = 6
 
@@ -193,8 +194,57 @@ else:
 
 print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
 
+# 3. ACERCAMIENTO A LOS LÍMITES DE CONTROL: (Solo funciona si la distancia entre los límites a la media es igual)
+print("3° ANALISIS  DE ACERCAMIENTO A LOS LIMITES DE CONTROL:")
+if round(LCS_DESV - sPromedio) == round(sPromedio - LCI_DESV):
+    print("Ojo: Este análisis funciona, porque la distancia de los límites a la linea central es la misma.")
+else:
+    print("Ojo: Este análisis no sería correcto, ya que las distancias de los limites a la línea central son diferentes.")
+
+MAS_1_SIG = sPromedio+(sPromedio-LCI_DESV)/3
+MENOS_1_SIG = sPromedio-(sPromedio-LCI_DESV)/3
+MAS_2_SIG = LCS_DESV-(sPromedio-LCI_DESV)/3
+MENOS_2_SIG = LCI_DESV+(sPromedio-LCI_DESV)/3
+
+# Longitud mínima de la secuencia consecutiva que deseas (2 o 3 en tu caso)
+long_min= 2
+
+# Variable para contar el número de valores consecutivos que cumplen con las condiciones
+conteo_consec = 0
+conteo_consec2 = 0
+
+# Positivo
+for v0 in datos_desv:
+    if MAS_2_SIG < v0 < LCS_DESV:
+        conteo_consecutivo += 1
+        if conteo_consecutivo >= long_min:
+            print(f"Se encontraron {long_min} o más datos consecutivos entre 2Sigma y el LCS")
+            break
+    else:
+        conteo_consecutivo = 0  # Reiniciamos el conteo si no se cumple la condición
+
+# Si llegamos aquí y no se encontraron suficientes datos consecutivos, puedes mostrar un mensaje
+if conteo_consecutivo < long_min:
+    print(f"No se encontraron {long_min} o más datos consecutivos entre 2Sigma y el LCS")
+# Negativo
+for v1 in datos_desv:
+    if LCI_DESV < v1 < MENOS_2_SIG:
+        conteo_consecutivo2 += 1
+        if conteo_consec2 >= long_min:
+            print(f"Se encontraron {long_min} o más datos consecutivos entre -2Simga y el LCI")
+            break
+    else:
+        conteo_consecutivo2 = 0 
+
+# Si llegamos aquí y no se encontraron suficientes datos consecutivos, puedes mostrar un mensaje
+if conteo_consec2 < long_min:
+    print(f"No se encontraron {long_min} o más datos consecutivos entre -2Simga y el LCI")
+
+print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
+
 # 4.CÁLCULO DE LOS PUNTOS FUERA DE LOS LÍMITES DE CONTROL:
-print("ANALISIS DE PUNTOS FUERA DE LOS LÍMITES DE CONTROL:")
+print("4° ANALISIS DE PUNTOS FUERA DE LOS LÍMITES DE CONTROL:")
+
 # LCS_DESV:
 # Inicializar un contador para los puntos mayores que LCS_DESV
 contador_mayores = 0
@@ -231,6 +281,31 @@ else:
 
 print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
 
+# 5. ANALISIS DE ACERCAMIENTO A LA LINEA CENTRAL
+
+# Calculo de cantidad de puntos maximos permitidos cerca entre +-1Sigma. (valor redondeado)
+print("5° ANALISIS DEL ACERCAMIENTO A LA LINEA CENTRAL:")
+tole_media = round(0.68*tiempo_gc)
+
+# Inicializar un contador para contar los valores que cumplen la condición
+contador = 0
+
+if round(LCS_DESV - sPromedio) == round(sPromedio - LCI_DESV):
+    print("Ojo: Este análisis funciona, porque la distancia de los límites a la linea central es la misma.")
+else:
+    print("Ojo: Este análisis no sería correcto, ya que las distancias de los limites a la línea central son diferentes.")
+# Iterar sobre los datos y verificar si cada valor cumple la condición
+for valor in datos_desv:
+    if MENOS_1_SIG < valor < MAS_1_SIG:
+        contador += 1
+
+if contador > tole_media:
+    print("Mas del 68% de los puntos están entre +1sigma y -1sigma.")
+else:
+    print("La cantidad de puntos entre +1sigma y -1sigma es normal.")
+
+print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
+print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
 # CREAMOS LA ARRAY DATOS PARA LAS MEDIAS:
 datos_medias = []
 
@@ -276,9 +351,90 @@ print("El límite -1Sigma es: ", MENOS_1_SIGMA)
 print("El límite -2Sigma es: ", MENOS_2_SIGMA)
 print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
 
-# 4.ACERCAMIENTO A LOS LIMITES DE CONTROL:
+# 7.RACHA:
 
-print("ANALISIS DEL ACERCAMIENTO A LOS LÍMITES DE CONTROL")
+print("7° ANALISIS DE RACHA:")
+min_puntos_conse = 7
+
+# Inicializar un contador para los puntos consecutivos
+contador_conse = 0
+contador_consecutivinn = 0
+
+for punto in datos_medias:
+    if punto > xPromedio:
+        contador_conse += 1
+        if contador_conse >= min_puntos_conse:
+            break
+    else:
+        contador_conse = 0
+
+# Verificar si se encontraron suficientes puntos consecutivos
+if contador_conse >= min_puntos_conse:
+    print(f"Se encontraron {min_puntos_conse} o más puntos consecutivos mayores que sProm.")
+else:
+    print(f"No se encontraron {min_puntos_conse} o más puntos consecutivos mayores que sProm.")
+
+# CÁLCULO DE RACHA NEGATIVA:
+for puntito in datos_medias:
+    if puntito < xPromedio:
+        contador_consecutivinn += 1
+        if contador_consecutivinn >= min_puntos_conse:
+            break
+    else:
+        contador_conse = 0
+
+# Verificar si se encontraron suficientes puntos consecutivos
+if contador_conse >= min_puntos_conse:
+    print(f"Se encontraron {min_puntos_conse} o más puntos consecutivos menores que el sProm.")
+else:
+    print(f"No se encontraron {min_puntos_conse} o más puntos consecutivos menores que sProm.")
+
+print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
+# 8.TENDENCIA:
+
+print("8° ANALISIS DE LA TENDENCIA:")
+# Longitud de la secuencia que deseas encontrar (en este caso, 6 números consecutivos)
+longitud_objetivo = 6
+
+# Variables para contar la longitud de la secuencia actual
+long_actual = 1
+
+# Variable para almacenar el tipo de secuencia (ascendente, descendente o ninguna)
+tipo_secuen = None
+
+# Recorremos la lista desde el segundo elemento en adelante
+for i in range(1, len(datos_medias)):
+    if datos_medias[i] > datos_medias[i - 1]:
+        if tipo_secuen == "ascendentes" or tipo_secuen is None:
+            long_actual += 1
+            tipo_secuen = "ascendentes"
+        else:
+            long_actual = 1
+            tipo_secuen = None
+    elif datos_medias[i] < datos_medias[i - 1]:
+        if tipo_secuen == "descendentes" or tipo_secuen is None:
+            long_actual += 1
+            tipo_secuen = "descendentes"
+        else:
+            long_actual = 1
+            tipo_secuen = None
+    else:
+        long_actual = 1
+        tipo_secuen = None
+
+    if long_actual == longitud_objetivo:
+        break
+
+# Verificamos si encontramos una secuencia de la longitud deseada
+if long_actual == longitud_objetivo:
+    print(f"Se encontró una secuencia de {longitud_objetivo} o más números {tipo_secuen}.")
+else:
+    print(f"No se encontró una secuencia de {longitud_objetivo} números consecutivos ascendentes o descendentes.")
+
+print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
+
+# 9.ACERCAMIENTO A LOS LIMITES DE CONTROL:
+print("9° ANALISIS DEL ACERCAMIENTO A LOS LÍMITES DE CONTROL")
 # Longitud mínima de la secuencia consecutiva que deseas (2 o 3)
 longitud_minima = 2
 
@@ -295,7 +451,6 @@ for val1 in datos_medias:
     else:
         conteo_consecutivo = 0  # Reiniciamos el conteo si no se cumple la condición
 
-# Si llegamos aquí y no se encontraron suficientes datos consecutivos, puedes mostrar un mensaje
 if conteo_consecutivo < longitud_minima:
     print(f"No se encontraron {longitud_minima} o más datos consecutivos que cumplan con las condiciones.")
 
@@ -314,8 +469,46 @@ if conteo_consecutivo2 < longitud_minima:
 
 print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
 
-# 5.ACERCAMIENTO A LA LÍNEA CENTRAL:
+# 10. PUNTOS FUERA DE LOS LÍMITES:
 
+print("10° ANALISIS DE PUNTOS FUERA DE LOS LÍMITES DE CONTROL:")
+
+# LCS_MEDIAS:
+# Inicializar un contador para los puntos mayores que LCS_DESV
+contador_mayoress = 0
+
+# Iterar sobre los datos_desv y contar los puntos mayores que LCS_DESV
+for dato in datos_medias:
+    if dato > LCS_MEDIAS:
+        contador_mayoress += 1
+        if contador_mayoress >= 2:
+            break
+
+# Verificar si se encontraron 2 o más puntos mayores que LCS_DESV
+if contador_mayoress >= 2:
+    print(f"Se encontraron 2 o más puntos mayores que LCS_DESV.")
+else:
+    print(f"No se encontraron 2 o más puntos mayores que LCS_DESV.")
+
+# LCI_MED:
+# Inicializar un contador para los datos_desv menores que LCI_DESV
+contador_menoress = 0
+
+# Iterar sobre los datos_desv y contar los datos_desv menores que LCI_DESV
+for dato in datos_medias:
+    if dato < LCI_MEDIAS:
+        contador_menoress += 1
+        if contador_menoress >= 2:
+            break
+
+# Verificar si se encontraron 2 o más puntos menores que LCI_DESV
+if contador_menoress >= 2:
+    print(f"Se encontraron 2 o más puntos menores que LCI_DESV.")
+else:
+    print(f"No se encontraron 2 o más puntos menores que LCI_DESV.")
+
+print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
+# 11.ACERCAMIENTO A LA LÍNEA CENTRAL:
 print("ANALISIS DEL ACERCAMIENTO A LA LINEA CENTRAL (xProm)")
 tolerancia_media = round(0.68*tiempo_gc)
 
@@ -335,8 +528,9 @@ else:
 
 print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
 
-# 6.PERIODICIDAD
+# 12.PERIODICIDAD
 print("ANALISIS DE PERIODICIDAD:")
+print("OJO: Esta en fase beta, probablemente contenga errores (Esta sujeto a cambios)")
 # Inicializamos variables para llevar el conteo
 conteo_arriba = 0
 conteo_abajo = 0
