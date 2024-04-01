@@ -507,7 +507,7 @@ if contador_menoress >= 2:
 else:
     print(f"No se encontraron 2 o más puntos menores que LCI_DESV.")
 
-print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
+print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
 # 11.ACERCAMIENTO A LA LÍNEA CENTRAL:
 print("ANALISIS DEL ACERCAMIENTO A LA LINEA CENTRAL (xProm)")
 tolerancia_media = round(0.68*tiempo_gc)
@@ -526,7 +526,7 @@ if contador > tolerancia_media:
 else:
     print("La cantidad de puntos entre +1sigma y -1sigma es normal.")
 
-print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
+print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
 
 # 12.PERIODICIDAD
 print("ANALISIS DE PERIODICIDAD:")
@@ -569,4 +569,4 @@ elif condicion_anterior == "abajo":
 elif condicion_anterior == "igual":
     print(f"Hubo un cambio: Ahora hay {conteo_igual} valores consecutivos iguales a xPromedio.")
 
-print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
+print("▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂")
